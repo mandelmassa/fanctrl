@@ -41,7 +41,11 @@ KERNEL=="gpio*", RUN="/bin/sh -c 'chgrp -R gpio /sys/%p /sys/class/gpio && chmod
 And then adding www-data to the gpio group like this:
 ```
 sudo useradd -g www-data gpio
+```
 
+Enable CGI in Apache by doing:
+```
+sudo a2enmod cgi
 ```
 
 The site configuration (`/etc/apache2/sites-enabled/000-default.conf`)
