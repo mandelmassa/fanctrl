@@ -11,7 +11,7 @@ It is written as a CGI program, so its output is html, and input is
 taken from html POST data. This processing happens in `post.c`.
 
 The program provides a template based macro system. The main function,
-in `site.c`, opens `template.html , and processes each line looking
+in `site.c`, opens `template.html`, and processes each line looking
 for specified macro markers. When a macro marker is discovered, an
 associated macro function is called. The output of this function is
 used in place of the marker. The macro processing is implemented in
