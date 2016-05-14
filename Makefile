@@ -11,6 +11,8 @@ OBJS	+= fanform.o
 OBJS	+= post.o
 OBJS	+= util.o
 
+TESTS	+= test_post
+
 default: install
 
 site: $(OBJS)
@@ -24,6 +26,26 @@ install: site
 	sudo cp template.html /var/www/html
 
 clean:
-	$(RM) site *.o *.d
+	$(RM) site *.o *.d $(TESTS)
 
 -include $(OBJS:.o=.d)
+
+######################################################################
+#
+# TESTS
+#
+######################################################################
+
+.SECONDARY: $(TESTS)
+.PHONY: test tests run_tests
+
+test_%: test_%.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+run_test_%: test_%
+	./$<
+
+run_tests: $(addprefix run_,$(TESTS))
+
+test tests: $(TESTS)
+	$(MAKE) run_tests

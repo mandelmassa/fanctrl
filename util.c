@@ -48,6 +48,7 @@ void util_appendstr(char **str, char *fmt, ...)
     else {
 	asprintf(&appstr, "%s%s", *str, fmtstr);
 	free(*str);
+	free(fmtstr);
 	*str = appstr;
     }
 }

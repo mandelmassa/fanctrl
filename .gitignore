@@ -1,0 +1,6 @@
+*.o
+*.d
+*~
+site
+test_*
+!test*.c
