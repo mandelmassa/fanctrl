@@ -1,0 +1,40 @@
+Content-type: text/html
+
+<!DOCTYPE HTML>
+<html>
+ <head>
+   <title>Fan Control</title>
+   <style>
+     body {
+     background-color: %bgcolor%;
+     color: %color%;
+     font-family: Verdana, Helvetica, sans-serif;
+     }
+     h1 {
+     font-size: 8vw;
+     }
+     input[type="submit"] {
+     width: 40%;
+     height: 8vw;
+     font-size: 6vw;
+     border:1px solid %color%;
+     border-radius: 0.5vw;
+     background: #ccc;
+     margin: 2%;
+     }
+     .status {
+     font-size: 4vw;
+     }
+     .generated {
+     font-size: 2vw;
+     }
+   </style>
+ </head>
+ <body>
+   <center>
+   <h1>Fan Control</h1>
+   %fanform%
+   <p class="generated">Site generated on: %time%</p>
+   </center>
+ </body>
+</html>
