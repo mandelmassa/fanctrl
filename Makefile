@@ -13,8 +13,6 @@ OBJS	+= util.o
 
 TESTS	+= test_post
 
-default: install
-
 site: $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
 
@@ -36,6 +34,7 @@ clean:
 #
 ######################################################################
 
+-include $(addsuffix .d,$(TESTS))
 .SECONDARY: $(TESTS)
 .PHONY: test tests run_tests
 
