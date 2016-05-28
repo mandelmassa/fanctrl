@@ -8,10 +8,17 @@
 
 static void sendstring(char *teststring)
 {
-    if (post_data) {
-	free(post_data);
+    if (_post_data) {
+	free(_post_data);
     }
-    post_data = strdup(teststring);
+
+    if (teststring == NULL) {
+	_post_data = NULL;
+	unsetenv("CONTENT_LENGTH");
+    }
+    else {
+	_post_data = strdup(teststring);
+    }
 }
 
 static int dotest(char *input, char *value, char *expect)
@@ -63,6 +70,17 @@ int main(void)
     rv += dotest("aapa=wrong&apaa=wrong&apa=right", "apa", "right");
     rv += dotest("apa=wrong&bepa=wrong&cepa=wrong", "wrong", NULL);
     rv += dotest("apa=wrong&bepa=wrong&cepa=wrong", "ap", NULL);
+    rv += dotest(NULL,                              "apa", NULL);
+    rv += dotest("apa=wrong",                       "apabepacepadepa", NULL);
+    rv += dotest("apa=&bepa=wrong&cepa=wrong",      "apa", NULL);
+    rv += dotest("bepa=wrong&apa=&cepa=wrong",      "apa", NULL);
+    rv += dotest("bepa=wrong&cepa=wrong&apa=",      "apa", NULL);
+    rv += dotest("a=y",                             "a", "y");
+    rv += dotest("a=y&",                            "a", "y");
+    rv += dotest("b=n",                             "a", NULL);
+    rv += dotest("&a=right",                        "a", "right");
+    rv += dotest("&a=right&",                       "a", "right");
+    rv += dotest(NULL,                              NULL, NULL);
 
     return rv;
 }

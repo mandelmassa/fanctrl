@@ -29,50 +29,42 @@
 
 #include "post.h"
 
-static char *post_data = NULL;
+static char *_post_data = NULL;
 
 static char *post_get_data(void);
 
 char *post_get_val(char *name)
 {
     char *post;
-    char *hit, *hitend, *strret;
-    int namelen;
+    char *param, *paramsave;
+    char *pname, *pnamesave;
+    char *pval;
 
     post = post_get_data();
     if (post == NULL) {
 	return NULL;
     }
 
-    namelen = strlen(name);
-    for (hit = strstr(post, name); hit; hit = strstr(hit, name)) {
-	// check for phony prefix match
-	if (hit[namelen] != '=') {
-	    hit++;
-	    continue;
+    pval = NULL;
+    for (param = strtok_r(post, "&", &paramsave);
+	 param != NULL;
+	 param = strtok_r(NULL, "&", &paramsave))
+    {
+	pname = strtok_r(param, "=", &pnamesave);
+	if (strcmp(pname, name) == 0) {
+	    pval = strtok_r(NULL, "=", &pnamesave);
+	    if (pval == NULL || strlen(pval) == 0) {
+		pval = NULL;
+	    }
+	    else {
+		pval = strdup(pval);
+	    }
+	    break;
 	}
-
-	// check for phony suffix match
-	if (hit != post &&
-	    hit[-1] != '&')
-	{
-	    hit++;
-	    continue;
-	}
-
-	// ok, extract value
-	hitend = strstr(hit, "&");
-	if (hitend) {
-	    *hitend = '\0';
-	}
-	strret = strdup(hit + namelen + 1);
-	if (hitend) {
-	    *hitend = '&';
-	}
-	return strret;
     }
 
-    return NULL;
+    free(post);
+    return pval;
 }
 
 static char *post_get_data(void)
@@ -83,8 +75,8 @@ static char *post_get_data(void)
     size_t leni;
     static char input[INPUTBUF];
 
-    if (post_data != NULL) {
-	return post_data;
+    if (_post_data != NULL) {
+	return strdup(_post_data);
     }
 
     len = getenv("CONTENT_LENGTH");
@@ -96,10 +88,13 @@ static char *post_get_data(void)
     if (leni > INPUTBUF) {
 	return NULL;
     }
+    if (leni == 0) {
+	return NULL;
+    }
 
     memset(input, 0, sizeof(input));
     fgets(input, INPUTBUF - 1, stdin);
 
-    post_data = input;
-    return post_data;
+    _post_data = input;
+    return strdup(_post_data);
 }
