@@ -23,6 +23,9 @@
  * SOFTWARE.
  *
  ***************************************************************************/
+#define _GNU_SOURCE
+#include <stdio.h>
+
 #ifndef _UTIL_H
 #define _UTIL_H
 

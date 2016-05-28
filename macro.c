@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "macro.h"
 
 static char *process_macro(char *line, char *macro, macro_func_t *func);
