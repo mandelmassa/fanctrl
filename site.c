@@ -31,6 +31,7 @@
 
 #include "macro.h"
 #include "fanform.h"
+#include "util.h"
 
 static macro_func_t macro_bgcolor;
 static macro_func_t macro_color;
@@ -56,9 +57,11 @@ int main(int argc, char *argv[], char *env[])
     ssize_t read;
     size_t len;
 
+    util_init(argc, argv, env);
+
     fp = fopen("template.html", "r");
     if (fp == NULL) {
-	printf("templates missing\n");
+	TRACE_ERROR("templates missing");
 	rv = 1;
 	goto bail;
     }
@@ -118,13 +121,5 @@ static char *macro_bgcolor(void)
 
 static char *macro_time(void)
 {
-    time_t now;
-    struct tm *now_tm;
-    char *asc;
-
-    now = time(NULL);
-    now_tm = localtime(&now);
-    asc = asctime(now_tm);
-
-    return strdup(asc);
+    return util_timestamp();
 }

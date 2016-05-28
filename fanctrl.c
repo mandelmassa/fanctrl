@@ -51,7 +51,7 @@ int fanctrl_init(void)
     if (! util_file_exists(GPIO_PATH(FAN_PORT) "/direction")) {
 	fp = fopen("/sys/class/gpio/export", "w");
 	if (fp == NULL) {
-	    fprintf(stderr, "could not open gpio system\n");
+	    TRACE_ERROR("could not open gpio system");
 	    return FAN_FAN;
 	}
 	fprintf(fp, "%d", FAN_PORT);
@@ -71,7 +71,7 @@ int fanctrl_init(void)
 	nanosleep(&stime, NULL);
     }
     if (fp == NULL) {
-	fprintf(stderr, "could not open port value file\n");
+	TRACE_ERROR("could not open port value file");
 	return FAN_FAN;
     }
     fclose(fp);
@@ -87,7 +87,7 @@ int fanctrl_init(void)
 
     // set pin direction to out
     if (fp == NULL) {
-	fprintf(stderr, "could not open port direction file\n");
+	TRACE_ERROR("could not open port direction file");
 	return FAN_FAN;
     }
     fprintf(fp, "out");
@@ -113,7 +113,7 @@ int fanctrl_status(int *status)
 
     fp = fopen(GPIO_PATH(FAN_PORT) "/value", "r");
     if (fp == NULL) {
-	fprintf(stderr, "cannot open fan for reading\n");
+	TRACE_ERROR("cannot open fan for reading");
 	return FAN_FAN;
     }
 
@@ -140,13 +140,13 @@ static int set_gpio_value(int value)
     if (value != 0 &&
 	value != 1)
     {
-	fprintf(stderr, "illegal fan value %d\n", value);
+	TRACE_ERROR("illegal fan value %d", value);
 	return FAN_FAN;
     }
 
     fp = fopen(GPIO_PATH(FAN_PORT) "/value", "w");
     if (fp == NULL) {
-	fprintf(stderr, "could not open port value file\n");
+	TRACE_ERROR("could not open port value file");
 	return FAN_FAN;
     }
 

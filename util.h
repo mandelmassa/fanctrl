@@ -30,8 +30,17 @@
 extern "C" {
 #endif
 
+void util_init(int argc, char *argv[], char *env[]);
+char *util_timestamp(void);
 void util_appendstr(char **str, char *fmt, ...);
 int util_file_exists(char *name);
+
+#define TRACE_ERROR(fmt, ...) do {					\
+	extern char *_util_bin;						\
+	char *_tstamp = util_timestamp();				\
+	fprintf(stderr, "[%s] [%s] [%s:%u] " fmt "\n", _tstamp, _util_bin, __FILE__, __LINE__, ##__VA_ARGS__); \
+	free(_tstamp);						        \
+} while (0)
 
 #ifdef __cplusplus
 }

@@ -27,11 +27,35 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "util.h"
+
+char *_util_bin = NULL;
+
+void util_init(int argc, char *argv[], char *env[])
+{
+    _util_bin = argv[0];
+}
+
+char *util_timestamp(void)
+{
+    time_t now;
+    struct tm *now_tm;
+    char *asc, *rasc;
+
+    asc = (char *)malloc(200);
+    now = time(NULL);
+    now_tm = localtime(&now);
+    strftime(asc, 200, "%c", now_tm);
+    rasc = strdup(asc);
+
+    return rasc;
+}
 
 void util_appendstr(char **str, char *fmt, ...)
 {
