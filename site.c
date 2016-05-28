@@ -71,6 +71,7 @@ int main(int argc, char *argv[], char *env[])
 	free(line);
 	line = NULL;
     }
+    free(line);
 
   bail:
     if (fp) {

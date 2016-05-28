@@ -45,15 +45,13 @@ char *util_timestamp(void)
 {
     time_t now;
     struct tm *now_tm;
-    char *asc, *rasc;
+    char asc[200];
 
-    asc = (char *)malloc(200);
     now = time(NULL);
     now_tm = localtime(&now);
-    strftime(asc, 200, "%c", now_tm);
-    rasc = strdup(asc);
+    strftime(asc, sizeof(asc), "%c", now_tm);
 
-    return rasc;
+    return strdup(asc);
 }
 
 void util_appendstr(char **str, char *fmt, ...)
